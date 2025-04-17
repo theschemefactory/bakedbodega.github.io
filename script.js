@@ -186,6 +186,62 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
     }
 
+    // Function to get unique brands from menu section
+    function getUniqueBrands(items) {
+      return [...new Set(items.map(item => item.brand).filter(Boolean))].sort();
+    }
+
+    // Function to populate brand filter
+    function populateBrandFilter(selectElement, brands) {
+      brands.forEach(brand => {
+        const option = document.createElement('option');
+        option.value = brand;
+        option.textContent = brand;
+        selectElement.appendChild(option);
+      });
+    }
+
+    // Function to filter table rows
+    function filterTableRows(tbody, brand) {
+      const rows = tbody.getElementsByTagName('tr');
+      for (let row of rows) {
+        const brandCell = row.cells[0];
+        if (!brand || brandCell.textContent === brand) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    }
+
+    // Initialize filters for each top shelf section
+    if (menu.eigths) {
+      const eighthsFilter = document.querySelector('#eighths .brand-filter');
+      const eighthsBrands = getUniqueBrands(menu.eigths.topShelf);
+      populateBrandFilter(eighthsFilter, eighthsBrands);
+      eighthsFilter.addEventListener('change', (e) => {
+        filterTableRows(document.getElementById('eighths-topshelf'), e.target.value);
+      });
+    }
+
+    if (menu.quarters) {
+      const quartersFilter = document.querySelector('#quarters .brand-filter');
+      const quartersBrands = getUniqueBrands(menu.quarters.topShelf);
+      populateBrandFilter(quartersFilter, quartersBrands);
+      quartersFilter.addEventListener('change', (e) => {
+        filterTableRows(document.getElementById('quarters-topshelf'), e.target.value);
+      });
+    }
+
+    if (menu.halfs) {
+      const halvesFilter = document.querySelector('#halves .brand-filter');
+      const halvesBrands = getUniqueBrands(menu.halfs.topShelf);
+      populateBrandFilter(halvesFilter, halvesBrands);
+      halvesFilter.addEventListener('change', (e) => {
+        filterTableRows(document.getElementById('halves-topshelf'), e.target.value);
+      });
+    }
+
     // Initialize tab functionality
     const tabButtons = document.querySelectorAll("[data-tab]");
     const tabContents = document.querySelectorAll(".tab-content");
