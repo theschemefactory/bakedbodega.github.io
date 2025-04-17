@@ -123,27 +123,25 @@ function createTableRow(item) {
     // Handle dimes case
     row.innerHTML = `
       <td class="text-start">-</td>
-      <td class="text-start" title="${item}">${item}</td>
+      <td class="text-start expandable-cell">${item}</td>
       <td class="text-end">$10</td>
     `;
   } else {
     // Handle other cases
     row.innerHTML = `
-      <td class="text-start" title="${item.brand || "-"}">${
-      item.brand || "-"
-    }</td>
-      <td class="text-start" title="${item.name}">${item.name}</td>
+      <td class="text-start expandable-cell">${item.brand || "-"}</td>
+      <td class="text-start expandable-cell">${item.name}</td>
       <td class="text-end">${
         item.price ? "$" + item.price : "Market Price"
       }</td>
     `;
   }
+
   return row;
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
   try {
-
     // Populate dimes
     if (menu.dimes && menu.dimes.length > 0) {
       const dimesContent = document.getElementById("dimes-content");
@@ -207,4 +205,36 @@ document.addEventListener("DOMContentLoaded", async function () {
   } catch (error) {
     console.error("Error:", error);
   }
+
+  // Add click handlers for expandable cells
+  document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("expandable-cell")) {
+      // Remove expanded class from all other cells
+      document.querySelectorAll(".expandable-cell.expanded").forEach((cell) => {
+        if (cell !== e.target) cell.classList.remove("expanded");
+      });
+
+      // Toggle expanded class on clicked cell
+      e.target.classList.toggle("expanded");
+    } else {
+      // Close all expanded cells when clicking elsewhere
+      document.querySelectorAll(".expandable-cell.expanded").forEach((cell) => {
+        cell.classList.remove("expanded");
+      });
+    }
+  });
+
+  // Modal close functionality
+  const modal = document.getElementById("mobileModal");
+  const closeBtn = document.querySelector(".close-modal");
+
+  closeBtn.addEventListener("click", function () {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
 });
