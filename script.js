@@ -143,10 +143,6 @@ function createTableRow(item) {
 
 document.addEventListener("DOMContentLoaded", async function () {
   try {
-    // Fetch menu data
-    const response = await fetch("menu.json");
-    const data = await response.json();
-    const menu = data.menu;
 
     // Populate dimes
     if (menu.dimes && menu.dimes.length > 0) {
